@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/fragments/Header";
 import { TaskStatus, ViewMode, type Task } from "./types";
 import TaskModal from "./components/fragments/TaskModal";
@@ -6,6 +6,7 @@ import BoardView from "./components/fragments/BoardView";
 import { initialTasks } from "./lib/data";
 import ListView from "./components/fragments/ListView";
 import TimelineView from "./components/fragments/TimelineView";
+import { supabase } from "./lib/supabase";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
@@ -21,6 +22,20 @@ function App() {
   const openEditModal = (task: Task) => {
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const testConnection = async () => {
+      const { data, error } = await supabase.from("todos").select("*").limit(1);
+
+      if (error) {
+        console.error("❌ Supabase connection failed:", error.message);
+      } else {
+        console.log("✅ Supabase connected!", data);
+      }
+    };
+
+    testConnection();
+  }, []);
 
   return (
     <>
