@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TaskStatus, type Task } from "../../types";
 import TaskCard from "./TaskCard";
+import { updateTaskStatusById } from "../../services/todoService";
 
 interface BoardViewProps {
   tasks: Task[];
@@ -26,18 +27,30 @@ const BoardView: React.FC<BoardViewProps> = ({
     }
   };
 
-  const handleDrop = (
+  const handleDrop = async (
     e: React.DragEvent<HTMLDivElement>,
     status: TaskStatus
   ) => {
     e.preventDefault();
     setDragOverColumn(null);
+
     const taskId = e.dataTransfer.getData("taskId");
     if (!taskId) return;
 
     const task = tasks.find((t) => t.id === taskId);
-    if (task && task.status !== status) {
-      onUpdateTaskStatus(task, status);
+    if (!task || task.status === status) return;
+
+    // 1. Update UI instantly
+    onUpdateTaskStatus(task, status);
+
+    // 2. Update Supabase
+    try {
+      await updateTaskStatusById(task.id, status);
+    } catch (err) {
+      console.error("Failed to update status:", err);
+
+      // 3. Optional: rollback UI if needed
+      onUpdateTaskStatus(task, task.status);
     }
   };
 

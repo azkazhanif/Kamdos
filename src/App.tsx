@@ -7,34 +7,24 @@ import { initialTasks } from "./lib/data";
 import ListView from "./components/fragments/ListView";
 import TimelineView from "./components/fragments/TimelineView";
 import { supabase } from "./lib/supabase";
+import { selectTodo } from "./services/todoService";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.Board);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const updateStatus = (task: Task, newStatus: TaskStatus) => {
-    setTasks(
-      tasks.map((t) => (t.id === task.id ? { ...t, status: newStatus } : t))
-    );
-  };
 
   const openEditModal = (task: Task) => {
     setIsModalOpen(true);
   };
 
   useEffect(() => {
-    const testConnection = async () => {
-      const { data, error } = await supabase.from("todos").select("*").limit(1);
+    async function fetchTodos() {
+      const data = await selectTodo(); // <- CALL IT
+      setTasks(data as Task[]);
+    }
 
-      if (error) {
-        console.error("❌ Supabase connection failed:", error.message);
-      } else {
-        console.log("✅ Supabase connected!", data);
-      }
-    };
-
-    testConnection();
+    fetchTodos();
   }, []);
 
   return (
@@ -54,11 +44,7 @@ function App() {
 
           <div className="h-full w-full">
             {viewMode === ViewMode.Board && (
-              <BoardView
-                tasks={tasks}
-                onEditTask={openEditModal}
-                onUpdateTaskStatus={updateStatus}
-              />
+              <BoardView tasks={tasks} onEditTask={openEditModal} />
             )}
             {viewMode === ViewMode.List && (
               <div className="h-full overflow-y-auto custom-scrollbar pr-2">

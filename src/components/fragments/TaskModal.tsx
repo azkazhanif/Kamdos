@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TaskStatus, type Task } from "../../types";
+import { TaskStatus, type TaskInsert } from "../../types";
 import Button from "../ui/Button";
 import InputTitle from "../ui/forms/InputTitle";
 import FormRow from "../ui/forms/FormRow";
@@ -7,9 +7,11 @@ import Select from "../ui/forms/Select";
 import Input from "../ui/forms/Input";
 import ModalHeader from "../ui/ModalHeader";
 import DescriptionSection from "../ui/forms/DescriptionSection";
+import { supabase } from "../../lib/supabase";
 
 interface TaskModalProps {
   isOpen: boolean;
+  setIsOpen: () => false;
   // onDelete: (id: string) => void;
   // handleSave: (data: any) => void;
   // task: any; // or replace with proper Task type
@@ -35,8 +37,33 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const onDelete = (id: string) => {
     return id;
   };
-  const handleSave = (data: Task) => {
-    return data;
+
+  const handleSave = async () => {
+    const payload: TaskInsert = {
+      title,
+      description,
+      status,
+      tags: tags.split(",").map((t) => t.trim()),
+      startDate,
+      dueDate,
+      assignee: undefined,
+    };
+
+    const { data, error } = await supabase
+      .from("todos")
+      .insert(payload)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Insert failed:", error.message);
+      return;
+    }
+
+    console.log("Inserted:", data);
+
+    // Close modal when done
+    onClose();
   };
 
   if (!isOpen) return null;

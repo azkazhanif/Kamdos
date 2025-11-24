@@ -24,3 +24,5 @@ export interface Task {
   tags: string[];
   assignee?: string;
 }
+
+export type TaskInsert = Omit<Task, "id">;
