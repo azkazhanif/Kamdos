@@ -5,6 +5,7 @@ interface ButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   type?: "button" | "submit" | "reset";
+  fullWidth?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -12,6 +13,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   children,
   type = "button",
+  fullWidth = false,
 }) => {
   const baseStyle =
     "px-6 py-2 rounded-lg text-sm font-medium shadow-md transition-transform active:scale-95";
@@ -25,7 +27,9 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={`${baseStyle} ${variants[variant]}`}
+      className={`${baseStyle} ${variants[variant]} ${
+        fullWidth ? "w-full" : ""
+      }`}
     >
       {children}
     </button>

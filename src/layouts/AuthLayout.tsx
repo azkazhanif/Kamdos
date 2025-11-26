@@ -6,9 +6,9 @@ const AuthLayout = () => {
       {/* Left Side - Visual */}
       <div className="hidden lg:flex lg:w-1/2 bg-brand-600 relative overflow-hidden items-center justify-center">
         <div className="absolute inset-0 bg-linear-to-br from-brand-600 to-brand-800"></div>
-        <div className="relative z-10 text-white p-12 max-w-lg">
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-8 shadow-xl border border-white/10">
-            <span className="text-3xl font-bold">K</span>
+        <div className="relative z-10 text-gray-900 p-12 max-w-lg">
+          <div className="w-16 h-16 bg-blue-600 backdrop-blur-md rounded-2xl flex items-center justify-center mb-8 shadow-xl border border-white/10">
+            <span className="text-3xl font-bold text-white">K</span>
           </div>
           <h1 className="text-4xl font-bold mb-6">
             Manage projects with the power of AI.

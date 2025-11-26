@@ -7,7 +7,7 @@ import TimelineView from "../components/fragments/TimelineView";
 const Home = () => {
   return (
     <div>
-      {viewMode === ViewMode.Board && (
+      {/* {viewMode === ViewMode.Board && (
         <BoardView tasks={tasks} onEditTask={openEditModal} />
       )}
       {viewMode === ViewMode.List && (
@@ -17,7 +17,8 @@ const Home = () => {
       )}
       {viewMode === ViewMode.Timeline && (
         <TimelineView tasks={tasks} onEditTask={openEditModal} />
-      )}
+      )} */}
+      text
     </div>
   );
 };
