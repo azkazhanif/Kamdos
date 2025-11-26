@@ -6,14 +6,9 @@ import { updateTaskStatusById } from "../../services/todoService";
 interface BoardViewProps {
   tasks: Task[];
   onEditTask: (task: Task) => void;
-  onUpdateTaskStatus: (task: Task, status: TaskStatus) => void;
 }
 
-const BoardView: React.FC<BoardViewProps> = ({
-  tasks,
-  onEditTask,
-  onUpdateTaskStatus,
-}) => {
+const BoardView: React.FC<BoardViewProps> = ({ tasks, onEditTask }) => {
   const columns = Object.values(TaskStatus);
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null);
 
@@ -40,17 +35,11 @@ const BoardView: React.FC<BoardViewProps> = ({
     const task = tasks.find((t) => t.id === taskId);
     if (!task || task.status === status) return;
 
-    // 1. Update UI instantly
-    onUpdateTaskStatus(task, status);
-
     // 2. Update Supabase
     try {
       await updateTaskStatusById(task.id, status);
     } catch (err) {
       console.error("Failed to update status:", err);
-
-      // 3. Optional: rollback UI if needed
-      onUpdateTaskStatus(task, task.status);
     }
   };
 
@@ -102,7 +91,7 @@ const BoardView: React.FC<BoardViewProps> = ({
                   key={task.id}
                   task={task}
                   onEdit={onEditTask}
-                  onMove={onUpdateTaskStatus}
+                  onMove={handleDrop}
                 />
               ))}
               {columnTasks.length === 0 && (

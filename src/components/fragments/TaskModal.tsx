@@ -11,7 +11,6 @@ import { supabase } from "../../lib/supabase";
 
 interface TaskModalProps {
   isOpen: boolean;
-  setIsOpen: () => false;
   // onDelete: (id: string) => void;
   // handleSave: (data: any) => void;
   // task: any; // or replace with proper Task type
