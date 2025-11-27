@@ -3,6 +3,7 @@ import Button from "../../components/ui/Button";
 import TextInput from "../../components/ui/forms/TextInput";
 import AuthSwitchLink from "../../components/ui/auth/AuthSwitchLink";
 import AuthHeader from "../../components/ui/auth/AuthHeader";
+import { register } from "../../services/authService";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,21 @@ const Register = () => {
     password: "",
   });
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const user = await register(
+      formData.email,
+      formData.password,
+      formData.name
+    );
+    console.log("User created:", user);
+  } catch (err: any) {
+    console.error("Register Error:", err);
+    alert(err.message);
+  }
+};
+
 
   return (
     <div className="max-w-md w-full">
