@@ -4,8 +4,10 @@ import TextInput from "../../components/ui/forms/TextInput";
 import AuthSwitchLink from "../../components/ui/auth/AuthSwitchLink";
 import AuthHeader from "../../components/ui/auth/AuthHeader";
 import { register } from "../../services/authService";
+import { useNavigate } from "react-router";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,20 +15,18 @@ const Register = () => {
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const user = await register(
-      formData.email,
-      formData.password,
-      formData.name
-    );
-    console.log("User created:", user);
-  } catch (err: any) {
-    console.error("Register Error:", err);
-    alert(err.message);
-  }
-};
+    e.preventDefault();
+    try {
+      const result = await register(formData.email, formData.password);
 
+      if (result?.user) {
+        navigate("/", { replace: true });
+      }
+    } catch (err: any) {
+      console.error("Register Error:", err);
+      alert(err.message);
+    }
+  };
 
   return (
     <div className="max-w-md w-full">

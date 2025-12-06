@@ -3,15 +3,15 @@ import { supabase } from "../lib/supabase";
 export const register = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+      email,
+      password,
+    });
 
-  if (error) console.log(error);
+    if (error) console.log(error);
 
-  return data;
+    return data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
