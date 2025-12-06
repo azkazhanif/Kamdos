@@ -7,7 +7,7 @@ import Select from "../ui/forms/Select";
 import Input from "../ui/forms/Input";
 import ModalHeader from "../ui/ModalHeader";
 import DescriptionSection from "../ui/forms/DescriptionSection";
-import { supabase } from "../../lib/supabase";
+import { createPost } from "../../services/todoService";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -48,20 +48,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
       assignee: undefined,
     };
 
-    const { data, error } = await supabase
-      .from("todos")
-      .insert(payload)
-      .select()
-      .single();
+    await createPost(payload);
 
-    if (error) {
-      console.error("Insert failed:", error.message);
-      return;
-    }
-
-    console.log("Inserted:", data);
-
-    // Close modal when done
     onClose();
   };
 

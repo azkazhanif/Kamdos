@@ -5,10 +5,9 @@ import { updateTaskStatusById } from "../../services/todoService";
 
 interface BoardViewProps {
   tasks: Task[];
-  onEditTask: (task: Task) => void;
 }
 
-const BoardView: React.FC<BoardViewProps> = ({ tasks, onEditTask }) => {
+const BoardView: React.FC<BoardViewProps> = ({ tasks }) => {
   const columns = Object.values(TaskStatus);
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null);
 
@@ -42,6 +41,8 @@ const BoardView: React.FC<BoardViewProps> = ({ tasks, onEditTask }) => {
       console.error("Failed to update status:", err);
     }
   };
+
+  const onEditTask = () => {};
 
   return (
     <div className="flex overflow-x-auto h-full pb-4 gap-6">

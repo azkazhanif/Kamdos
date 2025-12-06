@@ -2,9 +2,18 @@ import { supabase } from "../lib/supabase";
 import type { Task, TaskInsert, TaskStatus } from "../types";
 
 export async function createPost(payload: TaskInsert) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("User not authenticated");
+
   const { data, error } = await supabase
     .from("todos")
-    .insert(payload)
+    .insert({
+      ...payload,
+      created_by: user.id,
+    })
     .select()
     .single();
 
@@ -13,9 +22,21 @@ export async function createPost(payload: TaskInsert) {
 }
 
 export async function selectTodo(): Promise<Task[]> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    console.log("No authenticated user");
+    return [];
+  }
+
+  const userId = session.user.id;
+
   const { data, error } = await supabase
     .from("todos")
-    .select("*") // or list specific columns
+    .select("*")
+    .eq("created_by", userId)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
