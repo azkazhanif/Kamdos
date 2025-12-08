@@ -1,13 +1,11 @@
 import React from "react";
-import { TaskStatus, type Task } from "../../types";
+import { TaskStatus, type Task } from "../../../types";
 
 interface TaskCardProps {
   task: Task;
-  onEdit: (task: Task) => void;
-  onMove?: (task: Task, newStatus: TaskStatus) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onMove }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const statusColors = {
     [TaskStatus.Backlog]: "bg-slate-100 text-slate-600 border-slate-200",
     [TaskStatus.Todo]: "bg-blue-50 text-blue-600 border-blue-200",
@@ -26,7 +24,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onMove }) => {
       draggable
       onDragStart={handleDragStart}
       className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing group"
-      onClick={() => onEdit(task)}
     >
       <div className="flex justify-between items-start mb-2">
         <span
@@ -78,7 +75,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onMove }) => {
         ))}
       </div>
 
-      {onMove && (
+      {/* {onMove && (
         <div
           className="flex justify-end opacity-0 group-hover:opacity-100 transition-opacity pt-2 border-t border-slate-50 mt-2"
           onClick={(e) => e.stopPropagation()}
@@ -95,7 +92,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onMove }) => {
             ))}
           </select>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
